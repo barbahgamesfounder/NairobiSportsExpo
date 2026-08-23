@@ -105,11 +105,14 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  // Cursor trail — fine-pointer devices only, respects reduced-motion
+  // Cursor trail + water ripple — fine-pointer devices only, respects reduced-motion
   const canHover = window.matchMedia('(pointer: fine)').matches;
   const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   if (canHover && !reduceMotion) {
-    const DOT_COUNT = 8;
+    // Official SDG colors, ordered as a rainbow sweep
+    const SDG_RAINBOW = ['#E5243B', '#FD6925', '#FCC30B', '#4C9F38', '#26BDE2', '#0A97D9', '#19486A', '#DD1367'];
+
+    const DOT_COUNT = SDG_RAINBOW.length;
     const trail = document.createElement('div');
     trail.className = 'cursor-trail';
 
@@ -117,10 +120,11 @@ document.addEventListener('DOMContentLoaded', () => {
       const scale = 1 - i / DOT_COUNT;
       const dot = document.createElement('span');
       dot.className = 'cursor-dot';
-      const size = 6 + scale * 8;
+      const size = 7 + scale * 9;
       dot.style.width = `${size}px`;
       dot.style.height = `${size}px`;
-      dot.style.opacity = (0.55 * scale).toFixed(2);
+      dot.style.opacity = (0.7 * scale).toFixed(2);
+      dot.style.background = SDG_RAINBOW[i];
       trail.appendChild(dot);
       return { el: dot, x: window.innerWidth / 2, y: window.innerHeight / 2 };
     });
@@ -128,9 +132,27 @@ document.addEventListener('DOMContentLoaded', () => {
 
     let mouseX = window.innerWidth / 2;
     let mouseY = window.innerHeight / 2;
+
+    // Water ripple rings, spawned as the cursor moves (throttled)
+    let lastRipple = 0;
+    const RIPPLE_INTERVAL = 90;
+    function spawnRipple(x, y) {
+      const ripple = document.createElement('span');
+      ripple.className = 'water-ripple';
+      ripple.style.left = `${x}px`;
+      ripple.style.top = `${y}px`;
+      document.body.appendChild(ripple);
+      ripple.addEventListener('animationend', () => ripple.remove());
+    }
+
     window.addEventListener('mousemove', (e) => {
       mouseX = e.clientX;
       mouseY = e.clientY;
+      const now = performance.now();
+      if (now - lastRipple > RIPPLE_INTERVAL) {
+        lastRipple = now;
+        spawnRipple(mouseX, mouseY);
+      }
     });
 
     (function animateTrail() {
