@@ -306,6 +306,24 @@ h1, h2, h3 { letter-spacing: -0.02em; }
 
 .statement p.section-sub { margin: 20px auto 0; text-align: center; }
 
+.statement-sdg { position: relative; overflow: hidden; }
+
+.statement-sdg .container { position: relative; z-index: 1; }
+
+.statement-bg {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 820px;
+  max-width: 160%;
+  height: auto;
+  opacity: 0.16;
+  z-index: 0;
+  pointer-events: none;
+  user-select: none;
+}
+
 /* Grids: pillars / audience / ecosystem / sdg / experience */
 .card-grid {
   display: grid;
