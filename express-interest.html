@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Express Interest | Nairobi Esports Expo</title>
+<meta name="description" content="Tell us how your organisation would like to engage with the Nairobi Esports Expo and our team will explore the right opportunity with you.">
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
+<link rel="icon" type="image/png" sizes="64x64" href="favicon-64.png">
+<link rel="apple-touch-icon" href="favicon-64.png">
+<link rel="stylesheet" href="styles.css?v=5">
+</head>
+<body>
+<a href="#main" class="skip-link">Skip to content</a>
+
+<header class="site-header">
+  <div class="container nav-wrap">
+    <a href="/" class="logo">Nair<img src="sdg-wheel.png" alt="o" class="logo-o">bi<span>Esports</span>Expo</a>
+    <img src="sdg-logo.png" alt="Official Planeteer Club — SDG Games &amp; Esports" class="sdg-badge">
+    <nav class="nav-links" aria-label="Primary">
+      <a href="/the-expo">The Expo</a>
+      <a href="/experience">Experience</a>
+      <a href="/esports-ecosystem">Esports Ecosystem</a>
+      <a href="/sdg-quest">SDG Quest</a>
+      <a href="/beyond-2030">Beyond 2030</a>
+    </nav>
+    <div class="nav-ctas">
+      <a href="/waitlist" class="btn btn-ghost btn-sm">Get on the Waitlist</a>
+      <a href="/express-interest" class="btn btn-primary btn-sm" aria-current="page">Express Interest</a>
+    </div>
+    <button class="nav-toggle" aria-label="Toggle menu" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</header>
+
+<main id="main">
+
+  <section class="hero hero-simple">
+    <div class="container">
+      <div class="reveal">
+        <p class="eyebrow">Express Interest</p>
+        <h1>Your Organisation Has a Place in the Ecosystem.</h1>
+        <p class="hero-body">The Nairobi Esports Expo brings together Kenya's gaming, youth, technology and creative economy ecosystem. Tell us how your organisation would like to engage and our team will explore the right opportunity with you.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section reveal">
+    <div class="container">
+      <form
+        class="form-card"
+        data-endpoint="/api/express-interest"
+        data-success="Thank you for your interest in the Nairobi Esports Expo. Our team will review your submission and be in touch to explore how your organisation can engage with the Expo."
+        novalidate
+      >
+        <div>
+          <p class="eyebrow" style="margin-bottom:14px;">Engagement Areas</p>
+          <div class="check-grid">
+            <label class="check-item"><input type="checkbox" name="engagement_interests" value="sponsorship"> Sponsorship</label>
+            <label class="check-item"><input type="checkbox" name="engagement_interests" value="exhibition"> Exhibition</label>
+            <label class="check-item"><input type="checkbox" name="engagement_interests" value="brand_activation"> Brand Activation</label>
+            <label class="check-item"><input type="checkbox" name="engagement_interests" value="technology"> Technology</label>
+            <label class="check-item"><input type="checkbox" name="engagement_interests" value="talent_skills"> Talent &amp; Skills</label>
+            <label class="check-item"><input type="checkbox" name="engagement_interests" value="esg_sdgs"> ESG / SDGs</label>
+            <label class="check-item"><input type="checkbox" name="engagement_interests" value="community"> Community</label>
+            <label class="check-item"><input type="checkbox" name="engagement_interests" value="media"> Media</label>
+            <label class="check-item"><input type="checkbox" name="engagement_interests" value="other"> Other</label>
+          </div>
+        </div>
+
+        <label>
+          Organisation
+          <input type="text" name="organisation" required autocomplete="organization">
+        </label>
+        <label>
+          Name
+          <input type="text" name="name" required autocomplete="name">
+        </label>
+        <label>
+          Job title
+          <input type="text" name="job_title" autocomplete="organization-title">
+        </label>
+        <label>
+          Email
+          <input type="email" name="email" required autocomplete="email">
+        </label>
+        <label>
+          Phone
+          <input type="tel" name="phone" autocomplete="tel">
+        </label>
+        <label>
+          Organisation type
+          <select name="organisation_type">
+            <option value="brand">Brand</option>
+            <option value="corporate">Corporate</option>
+            <option value="telco">Telco</option>
+            <option value="technology">Technology</option>
+            <option value="data_centre_infrastructure">Data Centre / Infrastructure</option>
+            <option value="financial_services">Financial Services</option>
+            <option value="education">Education</option>
+            <option value="government_public_institution">Government / Public Institution</option>
+            <option value="development_organisation">Development Organisation</option>
+            <option value="media">Media</option>
+            <option value="agency">Agency</option>
+            <option value="other">Other</option>
+          </select>
+        </label>
+        <label>
+          Tell us briefly what you would like to explore with the Nairobi Esports Expo.
+          <textarea name="message" rows="4"></textarea>
+        </label>
+        <button type="submit" class="btn btn-primary">Submit Expression of Interest</button>
+        <p class="form-status" role="status"></p>
+      </form>
+    </div>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  <div class="container footer-inner">
+    <p>&copy; 2026 Nairobi Esports Expo. All rights reserved.</p>
+    <nav class="footer-nav" aria-label="Footer">
+      <a href="/the-expo">The Expo</a>
+      <a href="/experience">Experience</a>
+      <a href="/esports-ecosystem">Ecosystem</a>
+      <a href="/sdg-quest">SDG Quest</a>
+      <a href="/beyond-2030">Beyond 2030</a>
+    </nav>
+    <div class="powered-by">
+      <span>Powered by</span>
+      <a href="https://www.barbahgames.gg" target="_blank" rel="noopener">
+        <img src="barbah-logo.png" alt="BARBAH Games &amp; VR">
+      </a>
+    </div>
+  </div>
+</footer>
+
+<script src="script.js?v=3"></script>
+</body>
+</html>

@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Get on the Waitlist | Nairobi Esports Expo</title>
+<meta name="description" content="Be among the first to receive Nairobi Esports Expo updates, programme announcements, ticket information and opportunities to participate.">
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
+<link rel="icon" type="image/png" sizes="64x64" href="favicon-64.png">
+<link rel="apple-touch-icon" href="favicon-64.png">
+<link rel="stylesheet" href="styles.css?v=5">
+</head>
+<body>
+<a href="#main" class="skip-link">Skip to content</a>
+
+<header class="site-header">
+  <div class="container nav-wrap">
+    <a href="/" class="logo">Nair<img src="sdg-wheel.png" alt="o" class="logo-o">bi<span>Esports</span>Expo</a>
+    <img src="sdg-logo.png" alt="Official Planeteer Club — SDG Games &amp; Esports" class="sdg-badge">
+    <nav class="nav-links" aria-label="Primary">
+      <a href="/the-expo">The Expo</a>
+      <a href="/experience">Experience</a>
+      <a href="/esports-ecosystem">Esports Ecosystem</a>
+      <a href="/sdg-quest">SDG Quest</a>
+      <a href="/beyond-2030">Beyond 2030</a>
+    </nav>
+    <div class="nav-ctas">
+      <a href="/waitlist" class="btn btn-ghost btn-sm" aria-current="page">Get on the Waitlist</a>
+      <a href="/express-interest" class="btn btn-primary btn-sm">Express Interest</a>
+    </div>
+    <button class="nav-toggle" aria-label="Toggle menu" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</header>
+
+<main id="main">
+
+  <section class="hero hero-simple">
+    <div class="container">
+      <div class="reveal">
+        <p class="eyebrow">Waitlist</p>
+        <h1>Be First in Line.<br>Get on the Nairobi Esports Expo Waitlist.</h1>
+        <p class="hero-body">Be among the first to receive Expo updates, programme announcements, ticket information and opportunities to participate.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section reveal">
+    <div class="container">
+      <form
+        class="form-card"
+        data-endpoint="/api/waitlist"
+        data-success="You're on the list. We'll keep you updated as the Nairobi Esports Expo programme and ticket information are announced."
+        novalidate
+      >
+        <label>
+          Name
+          <input type="text" name="name" required autocomplete="name">
+        </label>
+        <label>
+          Email
+          <input type="email" name="email" required autocomplete="email">
+        </label>
+        <label>
+          Phone
+          <input type="tel" name="phone" autocomplete="tel">
+        </label>
+        <div>
+          <p class="eyebrow" style="margin-bottom:14px;">I Am a:</p>
+          <div class="radio-grid">
+            <label class="check-item"><input type="radio" name="audience_type" value="gamer" required> Gamer</label>
+            <label class="check-item"><input type="radio" name="audience_type" value="parent_family"> Parent / Family</label>
+            <label class="check-item"><input type="radio" name="audience_type" value="student_young_person"> Student / Young Person</label>
+            <label class="check-item"><input type="radio" name="audience_type" value="creator"> Creator</label>
+            <label class="check-item"><input type="radio" name="audience_type" value="educator"> Educator</label>
+            <label class="check-item"><input type="radio" name="audience_type" value="other"> Other</label>
+          </div>
+        </div>
+        <button type="submit" class="btn btn-primary">Get on the Waitlist</button>
+        <p class="form-status" role="status"></p>
+      </form>
+    </div>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  <div class="container footer-inner">
+    <p>&copy; 2026 Nairobi Esports Expo. All rights reserved.</p>
+    <nav class="footer-nav" aria-label="Footer">
+      <a href="/the-expo">The Expo</a>
+      <a href="/experience">Experience</a>
+      <a href="/esports-ecosystem">Ecosystem</a>
+      <a href="/sdg-quest">SDG Quest</a>
+      <a href="/beyond-2030">Beyond 2030</a>
+    </nav>
+    <div class="powered-by">
+      <span>Powered by</span>
+      <a href="https://www.barbahgames.gg" target="_blank" rel="noopener">
+        <img src="barbah-logo.png" alt="BARBAH Games &amp; VR">
+      </a>
+    </div>
+  </div>
+</footer>
+
+<script src="script.js?v=3"></script>
+</body>
+</html>
