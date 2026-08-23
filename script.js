@@ -37,6 +37,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const endpoint = form.getAttribute('data-endpoint');
     const status = form.querySelector('.form-status');
     const submitBtn = form.querySelector('button[type="submit"]');
+    const gaEvent = form.getAttribute('data-ga-event');
 
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
@@ -64,6 +65,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const successMsg = form.getAttribute('data-success') || "Thanks — we'll be in touch soon.";
         if (status) { status.textContent = successMsg; status.className = 'form-status success'; }
+
+        if (gaEvent && typeof gtag === 'function') {
+          gtag('event', gaEvent, {
+            page_path: location.pathname,
+            audience_type: payload.audience_type || undefined,
+            organisation_type: payload.organisation_type || undefined,
+          });
+        }
+
         form.reset();
       } catch (err) {
         if (status) {
@@ -73,6 +83,25 @@ document.addEventListener('DOMContentLoaded', () => {
       } finally {
         if (submitBtn) submitBtn.disabled = false;
       }
+    });
+  });
+
+  // CTA click tracking — any link pointing to the two conversion routes
+  document.querySelectorAll('a[href="/waitlist"], a[href="/express-interest"]').forEach((link) => {
+    link.addEventListener('click', () => {
+      if (typeof gtag !== 'function') return;
+      const dest = link.getAttribute('href') === '/waitlist' ? 'waitlist' : 'express_interest';
+      const location_group = link.closest('.nav-ctas') ? 'nav'
+        : link.closest('.mobile-cta-bar') ? 'mobile_sticky_bar'
+        : link.closest('.hero') ? 'hero'
+        : link.closest('.statement') ? 'statement'
+        : 'section';
+      gtag('event', 'cta_click', {
+        cta_destination: dest,
+        cta_location: location_group,
+        cta_text: link.textContent.trim(),
+        page_path: location.pathname,
+      });
     });
   });
 });

@@ -130,6 +130,10 @@ img { max-width: 100%; display: block; }
   flex-shrink: 0;
 }
 
+.mobile-cta-bar {
+  display: none;
+}
+
 .nav-toggle {
   display: none;
   flex-direction: column;
@@ -790,4 +794,18 @@ h1, h2, h3 { letter-spacing: -0.02em; }
   .sdg-badge { height: 36px; }
   .section { padding: 60px 0; }
   .statement { padding: 70px 0; }
+  body { padding-bottom: 68px; }
+  .mobile-cta-bar {
+    display: flex;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 200;
+    gap: 10px;
+    padding: 10px 14px;
+    background: var(--bg-alt);
+    border-top: 1px solid var(--border);
+  }
+  .mobile-cta-bar .btn { flex: 1; padding: 12px 10px; font-size: 0.9rem; text-align: center; }
 }
