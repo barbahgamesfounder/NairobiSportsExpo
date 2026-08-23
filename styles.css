@@ -493,11 +493,9 @@ h1, h2, h3 { letter-spacing: -0.02em; }
   font-size: clamp(1.4rem, 4vw, 2.4rem);
   font-weight: 800;
   text-transform: uppercase;
-  color: var(--text-dim);
+  color: var(--sdg-color, var(--text-dim));
   letter-spacing: -0.01em;
 }
-
-.keyword-list span:nth-child(odd) { color: var(--accent-bright); }
 
 /* Simple pill row (e.g. Beyond 2030 bridge keywords) */
 .flow-list {
