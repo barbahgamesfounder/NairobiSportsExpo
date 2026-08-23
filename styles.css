@@ -577,6 +577,13 @@ h1, h2, h3 { letter-spacing: -0.02em; }
   text-transform: uppercase;
   font-size: 0.9rem;
   letter-spacing: 0.05em;
+  box-shadow: 0 0 0 color-mix(in srgb, var(--sdg-color, transparent) 0%, transparent);
+  transition: box-shadow 0.25s, border-color 0.25s;
+}
+
+.flow-list .flow-item[style*="--sdg-color"] {
+  border-color: color-mix(in srgb, var(--sdg-color) 55%, var(--border));
+  box-shadow: 0 0 22px color-mix(in srgb, var(--sdg-color) 40%, transparent);
 }
 
 /* Ecosystem flow — vertical timeline */
