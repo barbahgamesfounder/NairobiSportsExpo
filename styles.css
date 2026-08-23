@@ -324,6 +324,12 @@ h1, h2, h3 { letter-spacing: -0.02em; }
   user-select: none;
 }
 
+.statement-bg-wordmark {
+  width: 380px;
+  max-width: 80%;
+  opacity: 0.22;
+}
+
 /* Grids: pillars / audience / ecosystem / sdg / experience */
 .card-grid {
   display: grid;
