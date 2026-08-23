@@ -327,7 +327,21 @@ h1, h2, h3 { letter-spacing: -0.02em; }
 .statement-bg-wordmark {
   width: 380px;
   max-width: 80%;
-  opacity: 0.22;
+  opacity: 0.13;
+}
+
+.statement-sdg h2 {
+  text-shadow: 0 2px 24px rgba(8, 8, 11, 0.9);
+}
+
+.statement-sdg .statement-sub {
+  text-shadow: 0 2px 20px rgba(8, 8, 11, 0.9);
+}
+
+.statement-sdg p.section-sub {
+  color: var(--text);
+  opacity: 0.92;
+  text-shadow: 0 2px 16px rgba(8, 8, 11, 0.9);
 }
 
 /* Grids: pillars / audience / ecosystem / sdg / experience */
