@@ -217,6 +217,32 @@ h1, h2, h3 { letter-spacing: -0.02em; }
   font-size: 1.05rem;
 }
 
+/* Legal pages (Privacy / Terms) */
+.legal-content {
+  max-width: 780px;
+}
+.legal-content h2 {
+  font-size: 1.4rem;
+  margin: 40px 0 12px;
+}
+.legal-content h2:first-of-type { margin-top: 0; }
+.legal-content h3 {
+  font-size: 1.1rem;
+  margin: 24px 0 10px;
+}
+.legal-content p,
+.legal-content li {
+  color: var(--text-dim);
+  line-height: 1.7;
+}
+.legal-content ul {
+  margin: 0 0 16px;
+  padding-left: 20px;
+}
+.legal-content li { margin-bottom: 6px; }
+.legal-content a { color: var(--accent-bright); }
+.legal-content strong { color: var(--text); }
+
 /* Hero */
 .hero {
   padding: 100px 0 80px;
