@@ -409,12 +409,19 @@ h1, h2, h3 { letter-spacing: -0.02em; }
 
 .sdg-card h3 { margin: 0; font-size: 0.95rem; }
 
+.brands-inner {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  gap: 40px;
+}
+
 .sdg17-badge {
   display: inline-flex;
   background: #fff;
   padding: 18px;
   border-radius: 14px;
-  margin-bottom: 24px;
+  justify-self: end;
 }
 
 .sdg17-badge img {
@@ -779,6 +786,8 @@ h1, h2, h3 { letter-spacing: -0.02em; }
 }
 
 @media (max-width: 720px) {
+  .brands-inner { grid-template-columns: 1fr; text-align: center; }
+  .brands-inner .sdg17-badge { order: -1; justify-self: center; margin-bottom: 8px; }
   .nav-links, .nav-ctas { display: none; }
   .nav-toggle { display: flex; }
   .site-header.open .nav-links {
