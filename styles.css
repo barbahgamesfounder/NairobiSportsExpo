@@ -64,6 +64,15 @@ img { max-width: 100%; display: block; }
 
 .logo span { color: var(--primary); }
 
+.logo-o {
+  width: 1em;
+  height: 1em;
+  object-fit: contain;
+  display: inline-block;
+  vertical-align: -0.15em;
+  border-radius: 50%;
+}
+
 .sdg-badge {
   height: 52px;
   width: auto;
