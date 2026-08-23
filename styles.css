@@ -345,6 +345,28 @@ h1, h2, h3 { letter-spacing: -0.02em; }
 
 .info-card p { margin: 0; color: var(--text-dim); font-size: 0.92rem; }
 
+/* SDG goal cards — colored per official SDG emblem */
+.sdg-card {
+  text-align: center;
+  border-top: 4px solid var(--sdg-color, var(--accent));
+  transition: border-color 0.2s, transform 0.2s, box-shadow 0.25s;
+}
+
+.sdg-card:hover {
+  border-color: var(--sdg-color, var(--accent));
+  box-shadow: 0 10px 30px color-mix(in srgb, var(--sdg-color, var(--accent)) 35%, transparent);
+}
+
+.sdg-goal-icon {
+  width: 72px;
+  height: 72px;
+  border-radius: 14px;
+  margin: 0 auto 16px;
+  object-fit: cover;
+}
+
+.sdg-card h3 { margin: 0; font-size: 0.95rem; }
+
 /* Journey / steps */
 .journey {
   display: grid;
