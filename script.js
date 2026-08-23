@@ -104,4 +104,46 @@ document.addEventListener('DOMContentLoaded', () => {
       });
     });
   });
+
+  // Cursor trail — fine-pointer devices only, respects reduced-motion
+  const canHover = window.matchMedia('(pointer: fine)').matches;
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (canHover && !reduceMotion) {
+    const DOT_COUNT = 8;
+    const trail = document.createElement('div');
+    trail.className = 'cursor-trail';
+
+    const dots = Array.from({ length: DOT_COUNT }, (_, i) => {
+      const scale = 1 - i / DOT_COUNT;
+      const dot = document.createElement('span');
+      dot.className = 'cursor-dot';
+      const size = 6 + scale * 8;
+      dot.style.width = `${size}px`;
+      dot.style.height = `${size}px`;
+      dot.style.opacity = (0.55 * scale).toFixed(2);
+      trail.appendChild(dot);
+      return { el: dot, x: window.innerWidth / 2, y: window.innerHeight / 2 };
+    });
+    document.body.appendChild(trail);
+
+    let mouseX = window.innerWidth / 2;
+    let mouseY = window.innerHeight / 2;
+    window.addEventListener('mousemove', (e) => {
+      mouseX = e.clientX;
+      mouseY = e.clientY;
+    });
+
+    (function animateTrail() {
+      let targetX = mouseX;
+      let targetY = mouseY;
+      dots.forEach((dot) => {
+        dot.x += (targetX - dot.x) * 0.35;
+        dot.y += (targetY - dot.y) * 0.35;
+        dot.el.style.transform = `translate(${dot.x}px, ${dot.y}px) translate(-50%, -50%)`;
+        targetX = dot.x;
+        targetY = dot.y;
+      });
+      requestAnimationFrame(animateTrail);
+    })();
+  }
 });
