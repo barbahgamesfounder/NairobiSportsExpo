@@ -409,6 +409,20 @@ h1, h2, h3 { letter-spacing: -0.02em; }
 
 .sdg-card h3 { margin: 0; font-size: 0.95rem; }
 
+.sdg17-badge {
+  display: inline-flex;
+  background: #fff;
+  padding: 18px;
+  border-radius: 14px;
+  margin-bottom: 24px;
+}
+
+.sdg17-badge img {
+  height: 88px;
+  width: auto;
+  display: block;
+}
+
 /* Journey / steps */
 .journey {
   display: grid;
