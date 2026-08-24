@@ -410,13 +410,13 @@ h1, h2, h3 { letter-spacing: -0.02em; }
 
 .info-card:hover { border-color: var(--accent); transform: translateY(-3px); }
 
-.info-card[style*="--sdg-color"] {
+.info-card[style*="--sdg-color"]:not(.sdg-card) {
   border-color: color-mix(in srgb, var(--sdg-color) 40%, var(--border));
   box-shadow: 0 0 30px color-mix(in srgb, var(--sdg-color) 20%, transparent);
   transition: border-color 0.2s, transform 0.2s, box-shadow 0.25s;
 }
 
-.info-card[style*="--sdg-color"]:hover {
+.info-card[style*="--sdg-color"]:not(.sdg-card):hover {
   border-color: var(--sdg-color);
   transform: translateY(-3px);
   box-shadow:
@@ -456,7 +456,10 @@ h1, h2, h3 { letter-spacing: -0.02em; }
 
 .sdg-card:hover {
   border-color: var(--sdg-color, var(--accent));
-  box-shadow: 0 10px 30px color-mix(in srgb, var(--sdg-color, var(--accent)) 35%, transparent);
+  transform: translateY(-3px);
+  box-shadow:
+    0 12px 34px color-mix(in srgb, var(--sdg-color, var(--accent)) 40%, transparent),
+    0 0 34px color-mix(in srgb, var(--sdg-color, var(--accent)) 30%, transparent);
 }
 
 .sdg-goal-icon {
