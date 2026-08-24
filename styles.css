@@ -321,6 +321,26 @@ h1, h2, h3 { letter-spacing: -0.02em; }
 .section { padding: 84px 0; }
 .section.alt { background: var(--bg-alt); }
 
+.section-beyond-bg {
+  position: relative;
+  overflow: hidden;
+  background-color: var(--bg-alt);
+}
+.section-beyond-bg::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(180deg, rgba(8, 8, 11, 0.86), rgba(8, 8, 11, 0.8) 45%, rgba(8, 8, 11, 0.92)),
+    url("beyond-2030-backdrop.jpg") center 30% / cover no-repeat;
+  z-index: 0;
+}
+.section-beyond-bg .container { position: relative; z-index: 1; }
+.section-beyond-bg h2,
+.section-beyond-bg .section-sub {
+  text-shadow: 0 2px 20px rgba(8, 8, 11, 0.9);
+}
+
 /* Big statement / dramatic full-width */
 .statement {
   padding: 100px 0;
