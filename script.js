@@ -149,10 +149,14 @@ document.addEventListener('DOMContentLoaded', () => {
       nodes.forEach((node) => {
         if (node.nodeType === Node.TEXT_NODE) {
           Array.from(node.textContent).forEach((ch) => {
+            if (ch === ' ') {
+              heading.appendChild(document.createTextNode(' '));
+              return;
+            }
             const span = document.createElement('span');
             span.className = 'letter';
             span.setAttribute('aria-hidden', 'true');
-            span.textContent = ch === ' ' ? ' ' : ch;
+            span.textContent = ch;
             heading.appendChild(span);
             letterEls.push(span);
           });
