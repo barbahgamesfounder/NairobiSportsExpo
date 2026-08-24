@@ -931,6 +931,15 @@ h1, h2, h3 { letter-spacing: -0.02em; }
 }
 .powered-by img { height: 20px; width: auto; }
 
+.footer-social { display: flex; align-items: center; gap: 14px; }
+.footer-social a {
+  display: inline-flex;
+  color: var(--text-dim);
+  transition: color 0.2s;
+}
+.footer-social a:hover { color: var(--accent-bright); }
+.footer-social svg { width: 20px; height: 20px; }
+
 /* Reveal-on-scroll */
 .reveal {
   opacity: 0;
