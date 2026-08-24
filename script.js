@@ -133,6 +133,58 @@ document.addEventListener('DOMContentLoaded', () => {
     let mouseX = window.innerWidth / 2;
     let mouseY = window.innerHeight / 2;
 
+    // Split heading text into per-letter spans so we can ripple color across them
+    const RIPPLE_RADIUS = 110;
+    const letterEls = [];
+    document.querySelectorAll('h1, h2, h3').forEach((heading) => {
+      if (heading.closest('.cursor-trail')) return;
+      const nodes = Array.from(heading.childNodes);
+      const originalLabel = nodes
+        .map((node) => (node.nodeType === Node.TEXT_NODE ? node.textContent : node.nodeName === 'BR' ? ' ' : node.textContent || ''))
+        .join('')
+        .trim()
+        .replace(/\s+/g, ' ');
+      heading.textContent = '';
+      heading.setAttribute('aria-label', originalLabel);
+      nodes.forEach((node) => {
+        if (node.nodeType === Node.TEXT_NODE) {
+          Array.from(node.textContent).forEach((ch) => {
+            const span = document.createElement('span');
+            span.className = 'letter';
+            span.setAttribute('aria-hidden', 'true');
+            span.textContent = ch === ' ' ? ' ' : ch;
+            heading.appendChild(span);
+            letterEls.push(span);
+          });
+        } else {
+          heading.appendChild(node);
+        }
+      });
+    });
+
+    let rippleTick = 0;
+    let frameCount = 0;
+    function updateLetterRipple() {
+      frameCount += 1;
+      if (frameCount % 4 === 0) rippleTick += 1;
+      letterEls.forEach((span, i) => {
+        const rect = span.getBoundingClientRect();
+        if (!rect.width && !rect.height) return;
+        const dx = mouseX - (rect.left + rect.width / 2);
+        const dy = mouseY - (rect.top + rect.height / 2);
+        const dist = Math.sqrt(dx * dx + dy * dy);
+        if (dist < RIPPLE_RADIUS) {
+          const proximity = 1 - dist / RIPPLE_RADIUS;
+          const sdgColor = SDG_RAINBOW[(i + rippleTick) % SDG_RAINBOW.length];
+          span.style.color = '#ffffff';
+          span.style.textShadow = `0 0 ${6 + proximity * 16}px ${sdgColor}`;
+        } else if (span.style.color) {
+          span.style.color = '';
+          span.style.textShadow = '';
+        }
+      });
+    }
+
     // Water ripple rings, spawned as the cursor moves (throttled)
     let lastRipple = 0;
     const RIPPLE_INTERVAL = 90;
@@ -165,6 +217,7 @@ document.addEventListener('DOMContentLoaded', () => {
         targetX = dot.x;
         targetY = dot.y;
       });
+      if (letterEls.length) updateLetterRipple();
       requestAnimationFrame(animateTrail);
     })();
   }

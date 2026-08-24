@@ -858,6 +858,11 @@ h1, h2, h3 { letter-spacing: -0.02em; }
   .hero, .statement { background-attachment: scroll; }
 }
 
+/* Letter ripple — per-character spans inside h1/h2/h3, colored by script.js on cursor proximity */
+.letter {
+  transition: color 0.2s ease, text-shadow 0.2s ease;
+}
+
 /* Cursor trail */
 .cursor-trail {
   position: fixed;
