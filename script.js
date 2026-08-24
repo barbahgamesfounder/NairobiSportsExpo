@@ -16,8 +16,8 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // Scroll-reveal animations
-  const reveals = document.querySelectorAll('.reveal');
+  // Scroll-reveal animations (also drives the pillar-list quest-unlock cascade)
+  const reveals = document.querySelectorAll('.reveal, .pillar-list');
   if ('IntersectionObserver' in window && reveals.length) {
     const observer = new IntersectionObserver((entries) => {
       entries.forEach((entry) => {
@@ -185,6 +185,25 @@ document.addEventListener('DOMContentLoaded', () => {
       });
     }
 
+    // Gamified pillar-list items (Explore/Play/Discover/Connect) — glow on cursor proximity
+    const PILLAR_RADIUS = 70;
+    const pillarItems = Array.from(document.querySelectorAll('.pillar-list li'));
+    function updatePillarGlow() {
+      pillarItems.forEach((li, i) => {
+        const rect = li.getBoundingClientRect();
+        if (!rect.width && !rect.height) return;
+        const nearestX = Math.max(rect.left, Math.min(mouseX, rect.right));
+        const nearestY = Math.max(rect.top, Math.min(mouseY, rect.bottom));
+        const dist = Math.hypot(mouseX - nearestX, mouseY - nearestY);
+        if (dist < PILLAR_RADIUS) {
+          li.style.setProperty('--pillar-glow', SDG_RAINBOW[(i + rippleTick) % SDG_RAINBOW.length]);
+          li.classList.add('pillar-active');
+        } else {
+          li.classList.remove('pillar-active');
+        }
+      });
+    }
+
     // Water ripple rings, spawned as the cursor moves (throttled)
     let lastRipple = 0;
     const RIPPLE_INTERVAL = 90;
@@ -218,6 +237,7 @@ document.addEventListener('DOMContentLoaded', () => {
         targetY = dot.y;
       });
       if (letterEls.length) updateLetterRipple();
+      if (pillarItems.length) updatePillarGlow();
       requestAnimationFrame(animateTrail);
     })();
   }
