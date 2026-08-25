@@ -533,6 +533,20 @@ h1, h2, h3 { letter-spacing: -0.02em; }
   padding: 24px 18px;
   position: relative;
   text-align: center;
+  transition: border-color 0.2s, transform 0.2s, box-shadow 0.25s;
+}
+
+.journey-step[style*="--sdg-color"] {
+  border-color: color-mix(in srgb, var(--sdg-color) 40%, var(--border));
+  box-shadow: 0 0 30px color-mix(in srgb, var(--sdg-color) 20%, transparent);
+}
+
+.journey-step[style*="--sdg-color"]:hover {
+  border-color: var(--sdg-color);
+  transform: translateY(-3px);
+  box-shadow:
+    0 12px 34px color-mix(in srgb, var(--sdg-color) 40%, transparent),
+    0 0 34px color-mix(in srgb, var(--sdg-color) 30%, transparent);
 }
 
 .journey-step .step-num {
@@ -542,8 +556,8 @@ h1, h2, h3 { letter-spacing: -0.02em; }
   width: 32px;
   height: 32px;
   border-radius: 50%;
-  background: var(--accent-dim);
-  color: var(--accent-bright);
+  background: color-mix(in srgb, var(--sdg-color, var(--accent)) 22%, var(--surface));
+  color: var(--sdg-color, var(--accent-bright));
   font-weight: 800;
   font-size: 0.85rem;
   margin-bottom: 14px;
