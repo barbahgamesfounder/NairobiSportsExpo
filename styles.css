@@ -675,15 +675,15 @@ h1, h2, h3 { letter-spacing: -0.02em; }
   height: 44px;
   border-radius: 50%;
   background: var(--surface);
-  border: 2px solid var(--accent);
-  color: var(--accent-bright);
+  border: 2px solid var(--sdg-color, var(--accent));
+  color: var(--sdg-color, var(--accent-bright));
   display: flex;
   align-items: center;
   justify-content: center;
   font-weight: 800;
   font-size: 0.95rem;
   flex-shrink: 0;
-  box-shadow: 0 0 0 6px var(--bg);
+  box-shadow: 0 0 0 6px var(--bg), 0 0 16px color-mix(in srgb, var(--sdg-color, var(--accent)) 35%, transparent);
   position: relative;
   z-index: 1;
   transition: box-shadow 0.25s ease, transform 0.25s ease;
@@ -692,37 +692,40 @@ h1, h2, h3 { letter-spacing: -0.02em; }
 .flow-label {
   flex: 1;
   background: var(--surface);
-  border: 1px solid var(--border);
+  border: 1px solid color-mix(in srgb, var(--sdg-color, var(--border)) 40%, var(--border));
   border-radius: 999px;
   padding: 13px 26px;
   font-weight: 800;
   text-transform: uppercase;
   font-size: 0.92rem;
   letter-spacing: 0.04em;
+  box-shadow: 0 0 20px color-mix(in srgb, var(--sdg-color, transparent) 16%, transparent);
   transition: border-color 0.25s ease, transform 0.25s ease, box-shadow 0.25s ease, background 0.25s ease;
 }
 
 .flow-node:hover .flow-num {
-  box-shadow: 0 0 0 6px var(--bg), 0 0 20px rgba(139, 92, 246, 0.55);
+  box-shadow: 0 0 0 6px var(--bg), 0 0 24px color-mix(in srgb, var(--sdg-color, var(--accent)) 60%, transparent);
   transform: scale(1.06);
 }
 
 .flow-node:hover .flow-label {
-  border-color: var(--accent);
+  border-color: var(--sdg-color, var(--accent));
   transform: translateX(6px);
-  box-shadow: 0 8px 24px rgba(139, 92, 246, 0.22);
+  box-shadow:
+    0 8px 24px color-mix(in srgb, var(--sdg-color, var(--accent)) 35%, transparent),
+    0 0 26px color-mix(in srgb, var(--sdg-color, var(--accent)) 30%, transparent);
 }
 
 .flow-node.flow-final .flow-num {
-  background: var(--accent);
-  border-color: var(--accent-bright);
+  background: var(--sdg-color, var(--accent));
+  border-color: var(--sdg-color, var(--accent-bright));
   color: #fff;
-  box-shadow: 0 0 0 6px var(--bg), 0 0 26px rgba(139, 92, 246, 0.65);
+  box-shadow: 0 0 0 6px var(--bg), 0 0 26px color-mix(in srgb, var(--sdg-color, var(--accent)) 65%, transparent);
 }
 
 .flow-node.flow-final .flow-label {
-  background: linear-gradient(135deg, var(--accent), #6d28d9);
-  border-color: var(--accent-bright);
+  background: linear-gradient(135deg, var(--sdg-color, var(--accent)), color-mix(in srgb, var(--sdg-color, var(--accent)) 55%, black));
+  border-color: var(--sdg-color, var(--accent-bright));
   color: #fff;
 }
 
