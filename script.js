@@ -220,13 +220,73 @@ document.addEventListener('DOMContentLoaded', () => {
       ripple.addEventListener('animationend', () => ripple.remove());
     }
 
+    // Hidden shake-counter mini-game — rapid back-and-forth motion in
+    // roughly the same spot activates a digital counter easter egg.
+    const SHAKE_MIN_DELTA = 12;
+    const SHAKE_MAX_INTERVAL = 500;
+    const SHAKE_MAX_RANGE = 140;
+    const SHAKE_SAMPLE_WINDOW = 900;
+    let shakeCount = 0;
+    let shakeDir = 0;
+    let lastShakeTime = 0;
+    let shakeSamples = [];
+    let shakeBadge = null;
+    let shakeFadeTimer = null;
+
+    function ensureShakeBadge() {
+      if (shakeBadge) return shakeBadge;
+      shakeBadge = document.createElement('div');
+      shakeBadge.className = 'shake-counter';
+      shakeBadge.innerHTML = '<span class="shake-counter-label">Shakes Found</span><span class="shake-counter-value">0</span>';
+      document.body.appendChild(shakeBadge);
+      return shakeBadge;
+    }
+
+    function shakeInRange() {
+      if (shakeSamples.length < 2) return false;
+      let minX = Infinity, maxX = -Infinity, minY = Infinity, maxY = -Infinity;
+      shakeSamples.forEach((s) => {
+        if (s.x < minX) minX = s.x;
+        if (s.x > maxX) maxX = s.x;
+        if (s.y < minY) minY = s.y;
+        if (s.y > maxY) maxY = s.y;
+      });
+      return (maxX - minX) < SHAKE_MAX_RANGE && (maxY - minY) < SHAKE_MAX_RANGE;
+    }
+
+    function registerShake(now) {
+      shakeCount += 1;
+      const badge = ensureShakeBadge();
+      badge.querySelector('.shake-counter-value').textContent = shakeCount;
+      badge.style.setProperty('--shake-color', SDG_RAINBOW[shakeCount % SDG_RAINBOW.length]);
+      badge.classList.remove('pulse');
+      void badge.offsetWidth;
+      badge.classList.add('pulse', 'is-visible');
+      clearTimeout(shakeFadeTimer);
+      shakeFadeTimer = setTimeout(() => badge.classList.remove('is-visible'), 4500);
+    }
+
     window.addEventListener('mousemove', (e) => {
+      const prevX = mouseX;
       mouseX = e.clientX;
       mouseY = e.clientY;
       const now = performance.now();
       if (now - lastRipple > RIPPLE_INTERVAL) {
         lastRipple = now;
         spawnRipple(mouseX, mouseY);
+      }
+
+      shakeSamples.push({ x: mouseX, y: mouseY, t: now });
+      while (shakeSamples.length && now - shakeSamples[0].t > SHAKE_SAMPLE_WINDOW) shakeSamples.shift();
+
+      const dx = mouseX - prevX;
+      if (Math.abs(dx) > SHAKE_MIN_DELTA) {
+        const dir = dx > 0 ? 1 : -1;
+        if (shakeDir !== 0 && dir !== shakeDir && (now - lastShakeTime) < SHAKE_MAX_INTERVAL && shakeInRange()) {
+          registerShake(now);
+        }
+        shakeDir = dir;
+        lastShakeTime = now;
       }
     });
 
