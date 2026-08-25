@@ -86,11 +86,11 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  // CTA click tracking — any link pointing to the two conversion routes
-  document.querySelectorAll('a[href="/waitlist"], a[href="/express-interest"]').forEach((link) => {
+  // CTA click tracking — any link pointing to the conversion routes
+  document.querySelectorAll('a[href="/waitlist"], a[href="/partners"]').forEach((link) => {
     link.addEventListener('click', () => {
       if (typeof gtag !== 'function') return;
-      const dest = link.getAttribute('href') === '/waitlist' ? 'waitlist' : 'express_interest';
+      const dest = link.getAttribute('href') === '/waitlist' ? 'waitlist' : 'partners';
       const location_group = link.closest('.nav-ctas') ? 'nav'
         : link.closest('.mobile-cta-bar') ? 'mobile_sticky_bar'
         : link.closest('.hero') ? 'hero'
