@@ -1069,6 +1069,28 @@ h1, h2, h3 { letter-spacing: -0.02em; }
   100% { transform: scale(1); }
 }
 
+/* Mobile tap effect — TikTok-style glowing SDG ring at each tap */
+.tap-ring {
+  position: fixed;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  border: 3px solid var(--ring-color, var(--accent));
+  box-shadow: 0 0 24px var(--ring-color, var(--accent)), 0 0 40px var(--ring-color, var(--accent)) inset;
+  pointer-events: none;
+  z-index: 9998;
+  transform: translate(-50%, -50%) scale(0.3);
+  opacity: 0.9;
+  animation: tap-ring-expand 0.55s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+@keyframes tap-ring-expand {
+  to {
+    transform: translate(-50%, -50%) scale(4.2);
+    opacity: 0;
+  }
+}
+
 /* Responsive */
 @media (max-width: 980px) {
   .hero-inner, .hero.hero-with-visual .hero-inner { grid-template-columns: 1fr; gap: 32px; text-align: center; }
@@ -1130,4 +1152,5 @@ h1, h2, h3 { letter-spacing: -0.02em; }
     border-top: 1px solid var(--border);
   }
   .mobile-cta-bar .btn { flex: 1; padding: 12px 10px; font-size: 0.9rem; text-align: center; }
+  .shake-counter { bottom: 78px; left: 14px; padding: 8px 14px; }
 }

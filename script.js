@@ -105,13 +105,42 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  // Cursor trail + water ripple — fine-pointer devices only, respects reduced-motion
+  // Cursor/touch effects — respect reduced-motion; fine-pointer vs coarse-pointer branch differently
   const canHover = window.matchMedia('(pointer: fine)').matches;
   const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  if (canHover && !reduceMotion) {
-    // Official SDG colors, ordered as a rainbow sweep
-    const SDG_RAINBOW = ['#E5243B', '#FD6925', '#FCC30B', '#4C9F38', '#26BDE2', '#0A97D9', '#19486A', '#DD1367'];
+  // Official SDG colors, ordered as a rainbow sweep
+  const SDG_RAINBOW = ['#E5243B', '#FD6925', '#FCC30B', '#4C9F38', '#26BDE2', '#0A97D9', '#19486A', '#DD1367'];
 
+  // Hidden combo-counter mini-game, shared by desktop shake detection and
+  // mobile tap detection below — one secret, two ways to trigger it.
+  let comboCount = 0;
+  let comboBadge = null;
+  let comboFadeTimer = null;
+
+  function ensureComboBadge() {
+    if (comboBadge) return comboBadge;
+    comboBadge = document.createElement('div');
+    comboBadge.className = 'shake-counter';
+    comboBadge.innerHTML = '<span class="shake-counter-label">Secret Found</span><span class="shake-counter-value">0</span>';
+    document.body.appendChild(comboBadge);
+    return comboBadge;
+  }
+
+  function registerCombo() {
+    comboCount += 1;
+    const color = SDG_RAINBOW[comboCount % SDG_RAINBOW.length];
+    const badge = ensureComboBadge();
+    badge.querySelector('.shake-counter-value').textContent = comboCount;
+    badge.style.setProperty('--shake-color', color);
+    badge.classList.remove('pulse');
+    void badge.offsetWidth;
+    badge.classList.add('pulse', 'is-visible');
+    clearTimeout(comboFadeTimer);
+    comboFadeTimer = setTimeout(() => badge.classList.remove('is-visible'), 4500);
+    return color;
+  }
+
+  if (canHover && !reduceMotion) {
     const DOT_COUNT = SDG_RAINBOW.length;
     const trail = document.createElement('div');
     trail.className = 'cursor-trail';
@@ -221,26 +250,14 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // Hidden shake-counter mini-game — rapid back-and-forth motion in
-    // roughly the same spot activates a digital counter easter egg.
+    // roughly the same spot activates the shared combo counter.
     const SHAKE_MIN_DELTA = 12;
     const SHAKE_MAX_INTERVAL = 500;
     const SHAKE_MAX_RANGE = 140;
     const SHAKE_SAMPLE_WINDOW = 900;
-    let shakeCount = 0;
     let shakeDir = 0;
     let lastShakeTime = 0;
     let shakeSamples = [];
-    let shakeBadge = null;
-    let shakeFadeTimer = null;
-
-    function ensureShakeBadge() {
-      if (shakeBadge) return shakeBadge;
-      shakeBadge = document.createElement('div');
-      shakeBadge.className = 'shake-counter';
-      shakeBadge.innerHTML = '<span class="shake-counter-label">Shakes Found</span><span class="shake-counter-value">0</span>';
-      document.body.appendChild(shakeBadge);
-      return shakeBadge;
-    }
 
     function shakeInRange() {
       if (shakeSamples.length < 2) return false;
@@ -252,18 +269,6 @@ document.addEventListener('DOMContentLoaded', () => {
         if (s.y > maxY) maxY = s.y;
       });
       return (maxX - minX) < SHAKE_MAX_RANGE && (maxY - minY) < SHAKE_MAX_RANGE;
-    }
-
-    function registerShake(now) {
-      shakeCount += 1;
-      const badge = ensureShakeBadge();
-      badge.querySelector('.shake-counter-value').textContent = shakeCount;
-      badge.style.setProperty('--shake-color', SDG_RAINBOW[shakeCount % SDG_RAINBOW.length]);
-      badge.classList.remove('pulse');
-      void badge.offsetWidth;
-      badge.classList.add('pulse', 'is-visible');
-      clearTimeout(shakeFadeTimer);
-      shakeFadeTimer = setTimeout(() => badge.classList.remove('is-visible'), 4500);
     }
 
     window.addEventListener('mousemove', (e) => {
@@ -283,7 +288,7 @@ document.addEventListener('DOMContentLoaded', () => {
       if (Math.abs(dx) > SHAKE_MIN_DELTA) {
         const dir = dx > 0 ? 1 : -1;
         if (shakeDir !== 0 && dir !== shakeDir && (now - lastShakeTime) < SHAKE_MAX_INTERVAL && shakeInRange()) {
-          registerShake(now);
+          registerCombo();
         }
         shakeDir = dir;
         lastShakeTime = now;
@@ -304,5 +309,40 @@ document.addEventListener('DOMContentLoaded', () => {
       if (pillarItems.length) updatePillarGlow();
       requestAnimationFrame(animateTrail);
     })();
+  }
+
+  // Mobile equivalent — tapping repeatedly in the same spot (TikTok-style)
+  // glows an SDG ring at each tap and drives the same shared combo counter.
+  if (!canHover && !reduceMotion) {
+    const TAP_RANGE = 50;
+    const TAP_MAX_INTERVAL = 650;
+    let lastTapX = null;
+    let lastTapY = null;
+    let lastTapTime = 0;
+
+    function spawnTapRing(x, y, color) {
+      const ring = document.createElement('span');
+      ring.className = 'tap-ring';
+      ring.style.left = `${x}px`;
+      ring.style.top = `${y}px`;
+      ring.style.setProperty('--ring-color', color);
+      document.body.appendChild(ring);
+      ring.addEventListener('animationend', () => ring.remove());
+    }
+
+    document.addEventListener('touchstart', (e) => {
+      if (!e.touches || !e.touches.length) return;
+      const touch = e.touches[0];
+      const x = touch.clientX;
+      const y = touch.clientY;
+      const now = performance.now();
+      const dist = lastTapX === null ? Infinity : Math.hypot(x - lastTapX, y - lastTapY);
+      const inCombo = dist < TAP_RANGE && (now - lastTapTime) < TAP_MAX_INTERVAL;
+      const color = inCombo ? registerCombo() : SDG_RAINBOW[comboCount % SDG_RAINBOW.length];
+      spawnTapRing(x, y, color);
+      lastTapX = x;
+      lastTapY = y;
+      lastTapTime = now;
+    }, { passive: true });
   }
 });
