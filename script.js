@@ -126,6 +126,44 @@ document.addEventListener('DOMContentLoaded', () => {
     return comboBadge;
   }
 
+  function spawnExplosion(count) {
+    const cx = window.innerWidth / 2;
+    const cy = window.innerHeight / 2;
+    for (let i = 0; i < count; i++) {
+      const particle = document.createElement('span');
+      particle.className = 'combo-particle';
+      const angle = (Math.PI * 2 * i) / count + Math.random() * 0.4;
+      const dist = 100 + Math.random() * 220;
+      const size = 6 + Math.random() * 8;
+      particle.style.left = `${cx}px`;
+      particle.style.top = `${cy}px`;
+      particle.style.width = `${size}px`;
+      particle.style.height = `${size}px`;
+      particle.style.setProperty('--tx', `${Math.cos(angle) * dist}px`);
+      particle.style.setProperty('--ty', `${Math.sin(angle) * dist}px`);
+      particle.style.background = SDG_RAINBOW[i % SDG_RAINBOW.length];
+      document.body.appendChild(particle);
+      particle.addEventListener('animationend', () => particle.remove());
+    }
+  }
+
+  function showWinnerPopup() {
+    const overlay = document.createElement('div');
+    overlay.className = 'winner-popup';
+    overlay.innerHTML =
+      '<div class="winner-card">' +
+        '<div class="winner-trophy">🏆</div>' +
+        '<h3>You\'re a Winner!</h3>' +
+        '<p>You found the hidden game and hit 1,000 combos.</p>' +
+        '<button type="button" class="btn btn-primary winner-close">Nice!</button>' +
+      '</div>';
+    document.body.appendChild(overlay);
+    overlay.addEventListener('click', (e) => {
+      if (e.target === overlay || e.target.closest('.winner-close')) overlay.remove();
+    });
+    requestAnimationFrame(() => overlay.classList.add('is-visible'));
+  }
+
   function registerCombo() {
     comboCount += 1;
     const color = SDG_RAINBOW[comboCount % SDG_RAINBOW.length];
@@ -137,6 +175,12 @@ document.addEventListener('DOMContentLoaded', () => {
     badge.classList.add('pulse', 'is-visible');
     clearTimeout(comboFadeTimer);
     comboFadeTimer = setTimeout(() => badge.classList.remove('is-visible'), 4500);
+
+    if (comboCount % 100 === 0) {
+      const milestone = comboCount / 100;
+      spawnExplosion(Math.min(14 + milestone * 6, 100));
+      if (comboCount === 1000) showWinnerPopup();
+    }
     return color;
   }
 
