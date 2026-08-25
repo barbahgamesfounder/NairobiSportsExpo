@@ -191,7 +191,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Gamified pillar-list items (Explore/Play/Discover/Connect) — glow on cursor proximity
     const PILLAR_RADIUS = 70;
-    const pillarItems = Array.from(document.querySelectorAll('.pillar-list li'));
+    const pillarItems = Array.from(document.querySelectorAll('.pillar-list .bubble'));
     function updatePillarGlow() {
       pillarItems.forEach((li, i) => {
         const rect = li.getBoundingClientRect();
