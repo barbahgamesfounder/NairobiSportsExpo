@@ -820,12 +820,17 @@ h1, h2, h3 { letter-spacing: -0.02em; }
   50% { transform: translateY(-6px); }
 }
 
+.bubble[style*="--sdg-color"] .bubble-inner {
+  color: var(--sdg-color);
+  border-color: color-mix(in srgb, var(--sdg-color) 45%, var(--border));
+}
+
 .bubble:hover .bubble-inner,
 .bubble.pillar-active .bubble-inner {
   color: #fff;
-  border-color: var(--pillar-glow, var(--accent));
-  background: color-mix(in srgb, var(--pillar-glow, var(--accent)) 18%, var(--surface));
-  box-shadow: 0 0 20px color-mix(in srgb, var(--pillar-glow, var(--accent)) 45%, transparent);
+  border-color: var(--pillar-glow, var(--sdg-color, var(--accent)));
+  background: color-mix(in srgb, var(--pillar-glow, var(--sdg-color, var(--accent))) 18%, var(--surface));
+  box-shadow: 0 0 20px color-mix(in srgb, var(--pillar-glow, var(--sdg-color, var(--accent))) 45%, transparent);
 }
 
 @media (prefers-reduced-motion: reduce) {
