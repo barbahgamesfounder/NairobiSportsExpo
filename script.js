@@ -53,6 +53,15 @@ document.addEventListener('DOMContentLoaded', () => {
           payload[key] = value;
         }
       }
+      payload.marketing_consent = formData.has('marketing_consent');
+
+      const params = new URLSearchParams(location.search);
+      payload.utm_source = params.get('utm_source') || undefined;
+      payload.utm_medium = params.get('utm_medium') || undefined;
+      payload.utm_campaign = params.get('utm_campaign') || undefined;
+      payload.utm_content = params.get('utm_content') || undefined;
+      payload.referrer = document.referrer || undefined;
+      payload.source = location.pathname;
 
       try {
         const res = await fetch(endpoint, {
