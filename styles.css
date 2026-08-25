@@ -1023,12 +1023,51 @@ h1, h2, h3 { letter-spacing: -0.02em; }
   pointer-events: none;
   z-index: 9999;
   transform: translate(-50%, -50%);
-  animation: combo-particle-burst 0.9s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  animation: combo-particle-burst 1.15s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
 @keyframes combo-particle-burst {
   0% { transform: translate(-50%, -50%) translate(0, 0) scale(1); opacity: 1; }
-  100% { transform: translate(-50%, -50%) translate(var(--tx), var(--ty)) scale(0.25); opacity: 0; }
+  65% { opacity: 1; }
+  100% { transform: translate(-50%, -50%) translate(var(--tx), calc(var(--ty) + 50px)) scale(0.15); opacity: 0; }
+}
+
+.combo-flash {
+  position: fixed;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 9998;
+  transform: translate(-50%, -50%) scale(0.4);
+  background: radial-gradient(circle, var(--flash-color, #fff) 0%, transparent 72%);
+  opacity: 0.95;
+  animation: combo-flash-pulse 0.55s ease-out forwards;
+}
+
+@keyframes combo-flash-pulse {
+  to { transform: translate(-50%, -50%) scale(11); opacity: 0; }
+}
+
+.combo-milestone-text {
+  position: fixed;
+  z-index: 10001;
+  font-size: clamp(1.8rem, 6vw, 3rem);
+  font-weight: 900;
+  letter-spacing: 0.02em;
+  color: var(--milestone-color, #fff);
+  text-shadow: 0 0 20px var(--milestone-color, #fff), 0 0 44px var(--milestone-color, #fff);
+  pointer-events: none;
+  white-space: nowrap;
+  opacity: 0;
+  animation: combo-milestone-pop 1.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes combo-milestone-pop {
+  0% { transform: translate(-50%, -50%) scale(0.3); opacity: 0; }
+  22% { transform: translate(-50%, -50%) scale(1.25); opacity: 1; }
+  38% { transform: translate(-50%, -55%) scale(1); opacity: 1; }
+  100% { transform: translate(-50%, -110%) scale(1); opacity: 0; }
 }
 
 .winner-popup {

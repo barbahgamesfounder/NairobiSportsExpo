@@ -126,25 +126,54 @@ document.addEventListener('DOMContentLoaded', () => {
     return comboBadge;
   }
 
-  function spawnExplosion(count) {
-    const cx = window.innerWidth / 2;
-    const cy = window.innerHeight / 2;
-    for (let i = 0; i < count; i++) {
-      const particle = document.createElement('span');
-      particle.className = 'combo-particle';
-      const angle = (Math.PI * 2 * i) / count + Math.random() * 0.4;
-      const dist = 100 + Math.random() * 220;
-      const size = 6 + Math.random() * 8;
-      particle.style.left = `${cx}px`;
-      particle.style.top = `${cy}px`;
-      particle.style.width = `${size}px`;
-      particle.style.height = `${size}px`;
-      particle.style.setProperty('--tx', `${Math.cos(angle) * dist}px`);
-      particle.style.setProperty('--ty', `${Math.sin(angle) * dist}px`);
-      particle.style.background = SDG_RAINBOW[i % SDG_RAINBOW.length];
-      document.body.appendChild(particle);
-      particle.addEventListener('animationend', () => particle.remove());
-    }
+  function spawnFlash(x, y, color) {
+    const flash = document.createElement('span');
+    flash.className = 'combo-flash';
+    flash.style.left = `${x}px`;
+    flash.style.top = `${y}px`;
+    flash.style.setProperty('--flash-color', color);
+    document.body.appendChild(flash);
+    flash.addEventListener('animationend', () => flash.remove());
+  }
+
+  function spawnMilestoneText(x, y, text, color) {
+    const el = document.createElement('span');
+    el.className = 'combo-milestone-text';
+    el.textContent = text;
+    el.style.left = `${x}px`;
+    el.style.top = `${y}px`;
+    el.style.setProperty('--milestone-color', color);
+    document.body.appendChild(el);
+    el.addEventListener('animationend', () => el.remove());
+  }
+
+  function spawnBurstWave(x, y, count, distMin, distMax, sizeMin, sizeMax, delay) {
+    setTimeout(() => {
+      for (let i = 0; i < count; i++) {
+        const particle = document.createElement('span');
+        particle.className = 'combo-particle';
+        const angle = (Math.PI * 2 * i) / count + Math.random() * 0.5;
+        const dist = distMin + Math.random() * (distMax - distMin);
+        const size = sizeMin + Math.random() * (sizeMax - sizeMin);
+        const color = SDG_RAINBOW[i % SDG_RAINBOW.length];
+        particle.style.left = `${x}px`;
+        particle.style.top = `${y}px`;
+        particle.style.width = `${size}px`;
+        particle.style.height = `${size}px`;
+        particle.style.setProperty('--tx', `${Math.cos(angle) * dist}px`);
+        particle.style.setProperty('--ty', `${Math.sin(angle) * dist}px`);
+        particle.style.background = color;
+        particle.style.boxShadow = `0 0 ${6 + size}px ${color}`;
+        document.body.appendChild(particle);
+        particle.addEventListener('animationend', () => particle.remove());
+      }
+    }, delay);
+  }
+
+  function spawnExplosion(x, y, count, color) {
+    spawnFlash(x, y, color);
+    spawnBurstWave(x, y, Math.round(count * 0.55), 60, 240, 8, 16, 0);
+    spawnBurstWave(x, y, Math.round(count * 0.45), 200, 420, 10, 22, 130);
   }
 
   function showWinnerPopup() {
@@ -164,7 +193,7 @@ document.addEventListener('DOMContentLoaded', () => {
     requestAnimationFrame(() => overlay.classList.add('is-visible'));
   }
 
-  function registerCombo() {
+  function registerCombo(x, y) {
     comboCount += 1;
     const color = SDG_RAINBOW[comboCount % SDG_RAINBOW.length];
     const badge = ensureComboBadge();
@@ -177,8 +206,12 @@ document.addEventListener('DOMContentLoaded', () => {
     comboFadeTimer = setTimeout(() => badge.classList.remove('is-visible'), 4500);
 
     if (comboCount % 100 === 0) {
+      const originX = x != null ? x : window.innerWidth / 2;
+      const originY = y != null ? y : window.innerHeight / 2;
       const milestone = comboCount / 100;
-      spawnExplosion(Math.min(14 + milestone * 6, 100));
+      const count = Math.min(24 + milestone * 10, 160);
+      spawnExplosion(originX, originY, count, color);
+      spawnMilestoneText(originX, originY, `${comboCount}!`, color);
       if (comboCount === 1000) showWinnerPopup();
     }
     return color;
@@ -332,7 +365,7 @@ document.addEventListener('DOMContentLoaded', () => {
       if (Math.abs(dx) > SHAKE_MIN_DELTA) {
         const dir = dx > 0 ? 1 : -1;
         if (shakeDir !== 0 && dir !== shakeDir && (now - lastShakeTime) < SHAKE_MAX_INTERVAL && shakeInRange()) {
-          registerCombo();
+          registerCombo(mouseX, mouseY);
         }
         shakeDir = dir;
         lastShakeTime = now;
@@ -382,7 +415,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const now = performance.now();
       const dist = lastTapX === null ? Infinity : Math.hypot(x - lastTapX, y - lastTapY);
       const inCombo = dist < TAP_RANGE && (now - lastTapTime) < TAP_MAX_INTERVAL;
-      const color = inCombo ? registerCombo() : SDG_RAINBOW[comboCount % SDG_RAINBOW.length];
+      const color = inCombo ? registerCombo(x, y) : SDG_RAINBOW[comboCount % SDG_RAINBOW.length];
       spawnTapRing(x, y, color);
       lastTapX = x;
       lastTapY = y;
