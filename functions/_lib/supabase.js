@@ -59,3 +59,13 @@ export async function insertPartnerInterest(env, row) {
   const rows = await res.json();
   return rows[0];
 }
+
+export async function listContacts(env, { limit = 200 } = {}) {
+  const res = await supabaseFetch(env, `/rest/v1/contacts?select=*&order=created_at.desc&limit=${limit}`);
+  return res.json();
+}
+
+export async function listPartnerInterests(env, { limit = 200 } = {}) {
+  const res = await supabaseFetch(env, `/rest/v1/partner_interests?select=*&order=created_at.desc&limit=${limit}`);
+  return res.json();
+}
