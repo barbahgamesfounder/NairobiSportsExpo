@@ -114,6 +114,12 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
+  // Flip cards (SDG Quest "Gaming Meets the Goals") — hover flips on desktop via
+  // CSS; tap-to-toggle here covers touch devices where hover doesn't exist.
+  document.querySelectorAll('.flip-card').forEach((card) => {
+    card.addEventListener('click', () => card.classList.toggle('flipped'));
+  });
+
   // Cursor/touch effects — respect reduced-motion; fine-pointer vs coarse-pointer branch differently
   const canHover = window.matchMedia('(pointer: fine)').matches;
   const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
