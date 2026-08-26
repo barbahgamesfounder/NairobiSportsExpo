@@ -492,8 +492,8 @@ h1, h2, h3 { letter-spacing: -0.02em; }
 
 .sdg-card h3 { margin: 0; font-size: 0.95rem; }
 
-/* Flip cards — SDG Quest "Gaming Meets the Goals" cards flip to show a gamification example */
-.sdg-card.flip-card {
+/* Flip cards — cards that flip to reveal a second face on hover/tap */
+.flip-card {
   padding: 0;
   min-height: 230px;
   perspective: 1200px;
@@ -509,8 +509,8 @@ h1, h2, h3 { letter-spacing: -0.02em; }
   transform-style: preserve-3d;
 }
 
-.sdg-card.flip-card:hover .flip-card-inner,
-.sdg-card.flip-card.flipped .flip-card-inner {
+.flip-card:hover .flip-card-inner,
+.flip-card.flipped .flip-card-inner {
   transform: rotateY(180deg);
 }
 
