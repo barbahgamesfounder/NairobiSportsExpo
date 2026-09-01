@@ -118,6 +118,19 @@
   }
   a.mailto { color: var(--accent-bright); text-decoration: none; }
   a.mailto:hover { text-decoration: underline; }
+  button.export-btn {
+    background: var(--accent);
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    padding: 9px 14px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: var(--font);
+  }
+  button.export-btn:hover { background: var(--accent-bright); }
+  button.export-btn:disabled { opacity: 0.5; cursor: not-allowed; }
 </style>
 </head>
 <body>
@@ -140,6 +153,7 @@
     <option value="medium">Medium</option>
     <option value="low">Low</option>
   </select>
+  <button type="button" class="export-btn" id="exportBtn">Export CSV</button>
 </div>
 
 <div id="content" class="loading">Loading leads…</div>
@@ -193,12 +207,12 @@
     return true;
   }
 
-  function render() {
+  function getVisibleRows() {
     const q = document.getElementById('search').value.trim();
     const type = document.getElementById('typeFilter').value;
     const priority = document.getElementById('priorityFilter').value;
 
-    const rows = allLeads
+    return allLeads
       .filter(l => matchesFilters(l, q, type, priority))
       .sort((a, b) => {
         const av = a[sortKey], bv = b[sortKey];
@@ -206,7 +220,10 @@
         const dir = sortDir === 'asc' ? 1 : -1;
         return av > bv ? dir : -dir;
       });
+  }
 
+  function render() {
+    const rows = getVisibleRows();
     const container = document.getElementById('content');
     if (!rows.length) {
       container.innerHTML = '<p class="empty">No leads match.</p>';
@@ -266,9 +283,62 @@
     });
   }
 
+  function csvEscape(v) {
+    const s = String(v ?? '');
+    return /[",\n]/.test(s) ? `"${s.replace(/"/g, '""')}"` : s;
+  }
+
+  function exportCsv() {
+    const rows = getVisibleRows();
+    if (!rows.length) return;
+
+    const cols = [
+      ['created_at', 'Signed Up'],
+      ['first_name', 'First Name'],
+      ['last_name', 'Last Name'],
+      ['email', 'Email'],
+      ['phone', 'Phone'],
+      ['organisation_name', 'Organisation'],
+      ['organisation_type', 'Organisation Type'],
+      ['job_title', 'Job Title'],
+      ['signup_type', 'Type'],
+      ['lifecycle_status', 'Status'],
+      ['lead_priority', 'Priority'],
+      ['lead_score', 'Lead Score'],
+      ['interests', 'Interests'],
+      ['source', 'Source'],
+      ['utm_source', 'UTM Source'],
+      ['utm_medium', 'UTM Medium'],
+      ['utm_campaign', 'UTM Campaign'],
+      ['utm_content', 'UTM Content'],
+      ['referrer', 'Referrer'],
+    ];
+
+    const lines = [cols.map(([, label]) => csvEscape(label)).join(',')];
+    for (const l of rows) {
+      const interests = (l.partner_interests || [])
+        .flatMap(pi => (pi.interest_type || '').split(',').map(s => s.trim()).filter(Boolean))
+        .join('; ');
+      const record = { ...l, interests };
+      lines.push(cols.map(([key]) => csvEscape(record[key])).join(','));
+    }
+
+    const csv = lines.join('\n');
+    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `nairobi-esports-expo-leads-${new Date().toISOString().slice(0, 10)}.csv`;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    URL.revokeObjectURL(url);
+  }
+
   document.getElementById('search').addEventListener('input', render);
   document.getElementById('typeFilter').addEventListener('change', render);
   document.getElementById('priorityFilter').addEventListener('change', render);
+  document.getElementById('exportBtn').addEventListener('click', exportCsv);
 
   load();
 </script>
